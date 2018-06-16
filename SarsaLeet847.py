@@ -47,12 +47,12 @@ class Env(object):
         state.append(action)
 
         self.NodeIndex = action
-        reward = -1
-        self.Visited[self.NodeIndex] = 1
+        reward = -10 * (self.Visited[self.NodeIndex] + 1) * (self.Visited[self.NodeIndex] + 1)
+        self.Visited[self.NodeIndex] += 1
 
         is_done = self.isDone()
         if is_done:
-            reward = 0
+            reward = 1000000
 
         return state, reward, is_done
 
@@ -131,7 +131,7 @@ class SarsaAgent(object):
             time_in_episode = 0
             is_done = False
             while not is_done:
-                print(a0, end="")
+                print(a0, end="->")
                 s1, r1, is_done = self.act(self.NodeHistory, a0)
                 # 在下行代码中添加参数use_epsilon = False即变成Q学习算法
                 a1 = self.performPolicy(s1, num_episode, use_epsilon=True)
@@ -162,7 +162,7 @@ def main(input):
     print("Learning...")
     agent.learning(gamma=1.0,
                    alpha=0.1,
-                   max_episode_num=1500)
+                   max_episode_num=50000)
 
 
 if __name__ == "__main__":
